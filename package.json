@@ -1,6 +1,6 @@
 {
     "name": "redis-client-async",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "description": "",
     "main": "RedisClientAsync.js",
     "dependencies": {
@@ -8,6 +8,7 @@
         "redis": "^2.8.0"
     },
     "devDependencies": {
+        "tslib": "^1.10.0",
         "typescript": "^3.7.3"
     },
     "scripts": {

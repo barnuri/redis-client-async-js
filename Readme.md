@@ -12,6 +12,8 @@ for all cb method add `Async` to the end
 import { RedisClientAsync, createClient } from 'redis-client-async';
 
 const client: RedisClientAsync = createClient(6379, 'localhost');
-
 const data = await client.getAsync('key')
+
+// add getKeyWithFallback function
+const date = await client.getKeyWithFallback('test', async () => new Date().toDateString());
 ```

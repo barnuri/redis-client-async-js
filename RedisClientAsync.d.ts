@@ -1,7 +1,10 @@
 import { ClientOpts, Callback, RedisClient, ServerInfo, Multi } from 'redis';
 export declare function createClient(port: number, host?: string, options?: ClientOpts): RedisClientAsync;
-export declare function getKeyWithFallback(client: RedisClientAsync, key: string, fallback: () => Promise<any>, ttlInSecs?: number): Promise<any>;
 export interface RedisClientAsync extends RedisClient {
+    getKeyWithFallback(key: string, fallback: () => Promise<any>, ttlInSecs?: number): Promise<{
+        data: any;
+        fromCache: boolean;
+    }>;
     duplicateAsync(options?: ClientOpts): Promise<RedisClientAsync>;
     sendCommandAsync(command: string, args?: any[]): Promise<any>;
     send_commandAsync(command: string, args?: any[]): Promise<any>;
@@ -162,10 +165,8 @@ export interface RedisClientAsync extends RedisClient {
     selectAsync(index: number | string): any;
     SELECTAsync(index: number | string): any;
     setAsync(key: string, value: string, flag?: string): Promise<'OK'>;
-    setAsync(key: string, value: string, duration?: number, flag?: string): Promise<'OK' | undefined>;
     setAsync(key: string, value: string, mode?: string, duration?: number, flag?: string): Promise<'OK' | undefined>;
     SETAsync(key: string, value: string, flag?: string): Promise<'OK'>;
-    SETAsync(key: string, value: string, duration?: number, flag?: string): Promise<'OK' | undefined>;
     SETAsync(key: string, value: string, mode?: string, duration?: number, flag?: string): Promise<'OK' | undefined>;
     setbitAsync(key: string, offset: number, value: string): Promise<number>;
     SETBITAsync(key: string, offset: number, value: string): Promise<number>;

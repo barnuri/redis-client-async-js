@@ -1,25 +1,28 @@
 import redis, { ClientOpts, Callback, RedisClient, ServerInfo, Multi } from 'redis';
 import bluebird from 'bluebird';
+
+export function createClient(port: number, host?: string, options?: ClientOpts): RedisClientAsync {
+    const client = redis.createClient(port, host, options) as RedisClientAsync;
+    client.getKeyWithFallback = async (key: string, fallback: () => Promise<any>, ttlInSecs?: number): Promise<{ data: any; fromCache: boolean }> => {
+        let data = await client.getAsync(key);
+        if (!data) {
+            data = await fallback();
+            if (ttlInSecs) {
+                await client.setAsync(key, data, 'EX', ttlInSecs);
+            }
+            await client.setAsync(key, data);
+            return { data, fromCache: false };
+        }
+        return { data, fromCache: true };
+    };
+    return client;
+}
+
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
-export function createClient(port: number, host?: string, options?: ClientOpts): RedisClientAsync {
-    return redis.createClient(port, host, options) as RedisClientAsync;
-}
-
-export async function getKeyWithFallback(client: RedisClientAsync, key: string, fallback: () => Promise<any>, ttlInSecs?: number): Promise<any> {
-    let data = await client.getAsync(key);
-    if (!data) {
-        console.log(`get key from fallback ${key}`);
-        data = await fallback();
-        client.setAsync(key, data, ttlInSecs);
-    } else {
-        console.log(`get key from cache ${key}`);
-    }
-    return data;
-}
-
 export interface RedisClientAsync extends RedisClient {
+    getKeyWithFallback(key: string, fallback: () => Promise<any>, ttlInSecs?: number): Promise<{ data: any; fromCache: boolean }>;
     duplicateAsync(options?: ClientOpts): Promise<RedisClientAsync>;
     sendCommandAsync(command: string, args?: any[]): Promise<any>;
     send_commandAsync(command: string, args?: any[]): Promise<any>;
@@ -178,10 +181,8 @@ export interface RedisClientAsync extends RedisClient {
     SELECTAsync(index: number | string);
 
     setAsync(key: string, value: string, flag?: string): Promise<'OK'>;
-    setAsync(key: string, value: string, duration?: number, flag?: string): Promise<'OK' | undefined>;
     setAsync(key: string, value: string, mode?: string, duration?: number, flag?: string): Promise<'OK' | undefined>;
     SETAsync(key: string, value: string, flag?: string): Promise<'OK'>;
-    SETAsync(key: string, value: string, duration?: number, flag?: string): Promise<'OK' | undefined>;
     SETAsync(key: string, value: string, mode?: string, duration?: number, flag?: string): Promise<'OK' | undefined>;
     setbitAsync(key: string, offset: number, value: string): Promise<number>;
     SETBITAsync(key: string, offset: number, value: string): Promise<number>;
