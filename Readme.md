@@ -9,11 +9,21 @@ https://www.npmjs.com/package/redis
 for all cb method add `Async` to the end
 
 ```js
-import { RedisClientAsync, createClient } from 'redis-client-async';
+import { RedisClientAsync, createClient } from './RedisClientAsync';
 
-const client: RedisClientAsync = createClient(6379, 'localhost');
-const data = await client.getAsync('key')
+async function test() {
+    const client: RedisClientAsync = createClient(6379, 'localhost');
 
-// add getKeyWithFallback function
-const date = await client.getKeyWithFallback('test', async () => new Date().toDateString());
+    await client.delAsync('key');
+    console.log(await client.getAsync('key'));
+    await client.setAsync('key', '1');
+    console.log(await client.getAsync('key'));
+
+    console.log(await client.getKeyWithFallback('key', async () => new Date().toDateString() as any));
+    console.log(await client.getKeyWithFallback('key', async () => new Date().toDateString() as any));
+
+    process.exit(0);
+}
+
+test();
 ```
