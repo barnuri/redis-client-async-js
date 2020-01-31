@@ -1,6 +1,6 @@
 {
-    "name": "redis-client-async",
-    "version": "1.0.9",
+    "name": "redis-promise",
+    "version": "1.0.0",
     "description": "",
     "author": "Bar Nuri",
     "license": "ISC",
