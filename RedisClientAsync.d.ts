@@ -1,13 +1,17 @@
 import { ClientOpts, Callback, RedisClient, ServerInfo, Multi } from 'redis';
-export declare function createClient(port: number, host?: string, options?: ClientOpts): RedisClientAsync;
 export interface RedisClientAsync extends RedisClient {
-    getKeyWithFallback(key: string, fallback: () => Promise<any>, ttlInSecs?: number): Promise<{
+    xadd(key: string, id: string, field: string, value: string, field2?: string, value2?: string, cb?: Callback<any>): any;
+    xaddAsync(key: string, id: string, field: string, value: string, field2?: string, value2?: string): Promise<object>;
+    xrevrange(key: string, end: string, start: string, count?: number, cb?: Callback<any>): any;
+    xrevrange(key: string, end: string, start: string, cb?: Callback<any>): any;
+    xrevrangeAsync(key: string, end: string, start: string, count?: number): Promise<object>;
+    getKeyWithFallback(key: string, fallback: () => Promise<object>, ttlInSecs?: number): Promise<{
         data: any;
         fromCache: boolean;
     }>;
     duplicateAsync(options?: ClientOpts): Promise<RedisClientAsync>;
-    sendCommandAsync(command: string, args?: any[]): Promise<any>;
-    send_commandAsync(command: string, args?: any[]): Promise<any>;
+    sendCommandAsync(command: string, args?: any[]): Promise<object>;
+    send_commandAsync(command: string, args?: any[]): Promise<object>;
     multiAsync(args?: Array<Array<string | number>>): Promise<Multi>;
     MULTIAsync(args?: Array<Array<string | number>>): Promise<Multi>;
     batchAsync(args?: Array<Array<string | number>>): Promise<Multi>;
@@ -75,7 +79,7 @@ export interface RedisClientAsync extends RedisClient {
     hgetAsync(key: string, field: string): Promise<string>;
     HGETAsync(key: string, field: string): Promise<string>;
     hgetallAsync(key: string): Promise<{
-        [key: string]: string;
+        [key: string]: any;
     }>;
     HGETALLAsync(key: string): Promise<{
         [key: string]: string;
@@ -180,7 +184,7 @@ export interface RedisClientAsync extends RedisClient {
     SISMEMBERAsync(key: string, member: string): Promise<number>;
     slaveofAsync(host: string, port: string | number): Promise<string>;
     SLAVEOFAsync(host: string, port: string | number): Promise<string>;
-    smembersAsync(key: string): Promise<string>;
+    smembersAsync(key: string): Promise<string[]>;
     SMEMBERSAsync(key: string): Promise<string>;
     smoveAsync(source: string, destination: string, member: string): Promise<number>;
     SMOVEAsync(source: string, destination: string, member: string): Promise<number>;
@@ -210,8 +214,8 @@ export interface RedisClientAsync extends RedisClient {
     ZINCRBYAsync(key: string, increment: number, member: string): Promise<string>;
     zlexcountAsync(key: string, min: string, max: string): Promise<number>;
     ZLEXCOUNTAsync(key: string, min: string, max: string): Promise<number>;
-    zrangeAsync(key: string, start: number, stop: number, withscores: string): Promise<string>;
-    ZRANGEAsync(key: string, start: number, stop: number, withscores: string): Promise<string>;
+    zrangeAsync(key: string, start: number, stop: number, withscores?: string): Promise<string>;
+    ZRANGEAsync(key: string, start: number, stop: number, withscores?: string): Promise<string>;
     zrangebylexAsync(key: string, min: string, max: string): Promise<string>;
     zrangebylexAsync(key: string, min: string, max: string, limit: string, offset: number, count: number): Promise<string>;
     ZRANGEBYLEXAsync(key: string, min: string, max: string): Promise<string>;
@@ -300,6 +304,62 @@ export interface RedisClientAsync extends RedisClient {
     ZUNIONSTOREAsync: OverloadedCommandAsync<string | number, number>;
     scanAsync: OverloadedCommandAsync<string, [string, string[]]>;
     SCANAsync: OverloadedCommandAsync<string, [string, string[]]>;
+    bitfieldAsync: OverloadedKeyCommandAsync<string | number, [number, number]>;
+    BITFIELDAsync: OverloadedKeyCommandAsync<string | number, [number, number]>;
+    geoaddAsync: OverloadedKeyCommandAsync<string | number, number>;
+    GEOADDAsync: OverloadedKeyCommandAsync<string | number, number>;
+    geohashAsync: OverloadedKeyCommandAsync<string, string>;
+    GEOHASHAsync: OverloadedKeyCommandAsync<string, string>;
+    geoposAsync: OverloadedKeyCommandAsync<string, Array<[number, number]>>;
+    GEOPOSAsync: OverloadedKeyCommandAsync<string, Array<[number, number]>>;
+    geodistAsync: OverloadedKeyCommandAsync<string, string>;
+    GEODISTAsync: OverloadedKeyCommandAsync<string, string>;
+    georadiusAsync: OverloadedKeyCommandAsync<string | number, Array<string | [string, string | [string, string]]>>;
+    GEORADIUSAsync: OverloadedKeyCommandAsync<string | number, Array<string | [string, string | [string, string]]>>;
+    georadiusbymemberAsync: OverloadedKeyCommandAsync<string | number, Array<string | [string, string | [string, string]]>>;
+    GEORADIUSBYMEMBERAsync: OverloadedKeyCommandAsync<string | number, Array<string | [string, string | [string, string]]>>;
+    hdelAsync: OverloadedKeyCommandAsync<string, number>;
+    HDELAsync: OverloadedKeyCommandAsync<string, number>;
+    hmgetAsync: OverloadedKeyCommandAsync<string, string[]>;
+    HMGETAsync: OverloadedKeyCommandAsync<string, string[]>;
+    lpushAsync: OverloadedKeyCommandAsync<string, number>;
+    LPUSHAsync: OverloadedKeyCommandAsync<string, number>;
+    pfaddAsync: OverloadedKeyCommandAsync<string, number>;
+    PFADDAsync: OverloadedKeyCommandAsync<string, number>;
+    rpushAsync: OverloadedKeyCommandAsync<string, number>;
+    RPUSHAsync: OverloadedKeyCommandAsync<string, number>;
+    saddAsync: OverloadedKeyCommandAsync<string, number>;
+    SADDAsync: OverloadedKeyCommandAsync<string, number>;
+    sdiffstoreAsync: OverloadedKeyCommandAsync<string, number>;
+    SDIFFSTOREAsync: OverloadedKeyCommandAsync<string, number>;
+    sinterAsync: OverloadedKeyCommandAsync<string, string[]>;
+    SINTERAsync: OverloadedKeyCommandAsync<string, string[]>;
+    sremAsync: OverloadedKeyCommandAsync<string, number>;
+    SREMAsync: OverloadedKeyCommandAsync<string, number>;
+    zaddAsync: OverloadedKeyCommandAsync<string | number, number>;
+    ZADDAsync: OverloadedKeyCommandAsync<string | number, number>;
+    zremAsync: OverloadedKeyCommandAsync<string, number>;
+    ZREMAsync: OverloadedKeyCommandAsync<string, number>;
+    sscanAsync: OverloadedKeyCommandAsync<string, [string, string[]]>;
+    SSCANAsync: OverloadedKeyCommandAsync<string, [string, string[]]>;
+    hscanAsync: OverloadedKeyCommandAsync<string, [string, string[]]>;
+    HSCANAsync: OverloadedKeyCommandAsync<string, [string, string[]]>;
+    zscanAsync: OverloadedKeyCommandAsync<string, [string, string[]]>;
+    ZSCANAsync: OverloadedKeyCommandAsync<string, [string, string[]]>;
+    subscribeAsync: OverloadedListCommandAsync<string, string>;
+    SUBSCRIBEAsync: OverloadedListCommandAsync<string, string>;
+    unsubscribeAsync: OverloadedListCommandAsync<string, string>;
+    UNSUBSCRIBEAsync: OverloadedListCommandAsync<string, string>;
+    psubscribeAsync: OverloadedListCommandAsync<string, string>;
+    PSUBSCRIBEAsync: OverloadedListCommandAsync<string, string>;
+    punsubscribeAsync: OverloadedListCommandAsync<string, string>;
+    PUNSUBSCRIBEAsync: OverloadedListCommandAsync<string, string>;
+    hmsetAsync: OverloadedSetCommandAsync<string | number, 'OK'>;
+    HMSETAsync: OverloadedSetCommandAsync<string | number, 'OK'>;
+    blpopAsync: OverloadedLastCommandAsync<string, number, [string, string]>;
+    BLPOPAsync: OverloadedLastCommandAsync<string, number, [string, string]>;
+    brpopAsync: OverloadedLastCommandAsync<string, number, [string, string]>;
+    BRPOPAsync: OverloadedLastCommandAsync<string, number, [string, string]>;
 }
 export interface OverloadedCommandAsync<T, U> {
     (arg1: T, arg2: T, arg3: T, arg4: T, arg5?: T, arg6?: T): Promise<U>;
@@ -307,4 +367,29 @@ export interface OverloadedCommandAsync<T, U> {
     (arg1: T | T[]): Promise<U>;
     (...args: T[]): Promise<U>;
 }
+export interface OverloadedKeyCommandAsync<T, U> {
+    (key: string, arg1: T, arg2?: T, arg3?: T, arg4?: T, arg5?: T, arg6?: T): U;
+    (key: string, arg1: T | T[]): U;
+    (key: string, ...args: T[]): U;
+    (...args: Array<string | T>): U;
+}
+export interface OverloadedListCommandAsync<T, U> {
+    (arg1: T, arg2: T, arg3?: T, arg4?: T, arg5?: T, arg6?: T): U;
+    (arg1: T | T[]): U;
+    (...args: T[]): U;
+}
+export interface OverloadedSetCommandAsync<T, U> {
+    (key: string, arg1: T, arg2?: T, arg3?: T, arg4?: T, arg5?: T, arg6?: T): U;
+    (key: string, arg1: T | {
+        [key: string]: T;
+    } | T[]): U;
+    (key: string, ...args: T[]): U;
+    (args: [string, ...T[]]): U;
+}
+export interface OverloadedLastCommandAsync<T1, T2, U> {
+    (arg1: T1, arg2: T1, arg3?: T1, arg4?: T1, arg5?: T1, arg6?: T2): U;
+    (args: Array<T1 | T2>): U;
+    (...args: Array<T1 | T2>): U;
+}
+export declare function createClient(port: number, host?: string, options?: ClientOpts): RedisClientAsync;
 //# sourceMappingURL=RedisClientAsync.d.ts.map

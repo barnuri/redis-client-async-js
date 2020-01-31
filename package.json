@@ -2,18 +2,25 @@
     "name": "redis-client-async",
     "version": "1.0.3",
     "description": "",
+    "author": "Bar Nuri",
+    "license": "ISC",
     "main": "RedisClientAsync.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
+        "update": "ncu -u",
+        "build": "tsc",
+        "prepublish": "npm patch"
+    },
     "dependencies": {
         "bluebird": "^3.7.2",
         "redis": "^2.8.0"
     },
     "devDependencies": {
+        "@types/redis": "^2.8.14",
+        "npm-check-updates": "^4.0.1",
+        "prettier": "^1.19.1",
         "tslib": "^1.10.0",
-        "typescript": "^3.7.3"
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "Bar Nuri",
-    "license": "ISC"
+        "typescript": "^3.7.5"
+    }
 }
