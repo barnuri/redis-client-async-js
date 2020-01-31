@@ -1,6 +1,6 @@
 {
-    "name": "promise-redis",
-    "version": "1.0.1",
+    "name": "typed-redis-async",
+    "version": "1.0.0",
     "description": "",
     "author": "Bar Nuri",
     "license": "ISC",
