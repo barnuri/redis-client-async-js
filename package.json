@@ -15,7 +15,8 @@
         "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
         "update": "ncu -u",
         "build": "tsc",
-        "prepublish": "git add . && git commit -m \"ver\" && npm version patch && git push"
+        "prepublish": "rimraf dist && tsc",
+        "postpublish": "npm version patch && git push"
     },
     "dependencies": {
         "bluebird": "^3.7.2",
@@ -25,6 +26,7 @@
         "@types/redis": "^2.8.14",
         "npm-check-updates": "^4.0.1",
         "prettier": "^1.19.1",
+        "rimraf": "^3.0.1",
         "tslib": "^1.10.0",
         "typescript": "^3.7.5"
     }
