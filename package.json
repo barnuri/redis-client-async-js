@@ -10,7 +10,7 @@
         "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
         "update": "ncu -u",
         "build": "tsc",
-        "prepublish": "npm patch"
+        "prepublish": "git add . && git commit -m \"ver\" && npm version patch;"
     },
     "dependencies": {
         "bluebird": "^3.7.2",
