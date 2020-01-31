@@ -5,6 +5,11 @@
     "author": "Bar Nuri",
     "license": "ISC",
     "main": "./dist/RedisClientAsync.js",
+    "homepage": "https://github.com/barnuri/redis-client-async-js",
+    "repository": {
+        "url": "https://github.com/barnuri/redis-client-async-js",
+        "type": "git"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
